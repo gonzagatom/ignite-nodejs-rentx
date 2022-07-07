@@ -24,6 +24,10 @@ class CategoriesRepository {
 
     this.categories.push(category);
   } // Cadastra categoria na tabela
+
+  list(): Category[] {
+    return this.categories;
+  }
 }
 
 export { CategoriesRepository };
