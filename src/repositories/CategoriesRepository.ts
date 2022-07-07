@@ -4,7 +4,7 @@ import { Category } from "../model/Category";
 interface ICreateCategoryDTO {
   name: string;
   description: string;
-}
+} // Interfaces começam sempre com I
 
 class CategoriesRepository {
   private categories: Category[];
