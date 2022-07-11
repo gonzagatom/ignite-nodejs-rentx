@@ -1,19 +1,17 @@
 import { Category } from "../model/Category";
+import {
+  ICategoriesRepository,
+  ICreateCategoryDTO,
+} from "./ICategoriesRepository";
 
-// DTO = Data transfer object
-interface ICreateCategoryDTO {
-  name: string;
-  description: string;
-} // Interfaces começam sempre com I
-
-class CategoriesRepository {
+class CategoriesRepository implements ICategoriesRepository {
   private categories: Category[];
 
   constructor() {
     this.categories = []; // Utilizar this para chamar o atributo que está dentro da classe
   }
 
-  create({ description, name }: ICreateCategoryDTO): void {
+  create({ name, description }: ICreateCategoryDTO): void {
     const category: Category = new Category();
 
     Object.assign(category, {
