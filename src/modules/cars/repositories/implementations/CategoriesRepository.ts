@@ -1,3 +1,6 @@
+import { getRepository } from "typeorm";
+import { Repository } from "typeorm/repository/Repository";
+
 import { Category } from "../../entities/Category";
 import {
   ICategoriesRepository,
@@ -7,12 +10,12 @@ import {
 // singleton
 
 class CategoriesRepository implements ICategoriesRepository {
-  private categories: Category[];
+  private repository: Repository<Category>;
 
   private static INSTANCE: CategoriesRepository;
 
   private constructor() {
-    this.categories = []; // Utilizar this para chamar o atributo que está dentro da classe
+    this.repository = getRepository(Category);
   }
 
   public static getInstance(): CategoriesRepository {
@@ -22,24 +25,24 @@ class CategoriesRepository implements ICategoriesRepository {
     return CategoriesRepository.INSTANCE;
   }
 
-  create({ name, description }: ICreateCategoryDTO): void {
-    const category: Category = new Category();
-
-    Object.assign(category, {
-      name,
+  async create({ name, description }: ICreateCategoryDTO): Promise<void> {
+    const category = this.repository.create({
       description,
-      created_at: new Date(),
+      name,
     });
 
-    this.categories.push(category);
+    await this.repository.save(category);
   } // Cadastra categoria na tabela
 
-  list(): Category[] {
-    return this.categories;
+  async list(): Promise<Category[]> {
+    const categories = await this.repository.find();
+    return categories;
   }
 
-  findByName(name: string): Category {
-    const category = this.categories.find((category) => category.name === name);
+  async findByName(name: string): Promise<Category> {
+    // Select * from categories where name = "name" [limit 1]
+
+    const category = await this.repository.findOne({ name });
     return category;
   }
 }
