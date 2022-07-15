@@ -2,6 +2,7 @@ import { compare } from "bcrypt";
 import { sign } from "jsonwebtoken";
 import { inject, injectable } from "tsyringe";
 
+import { AppError } from "../../../../errors/AppError";
 import { IUsersRepository } from "../../repositories/IUsersRepository";
 
 interface IRequest {
@@ -31,7 +32,7 @@ class AuthenticateUserUseCase {
 
     // Mensagem se o usuário não existir
     if (!user) {
-      throw new Error("Email or password incorrect!");
+      throw new AppError("Email or password incorrect!");
     }
 
     // Variável de comparação da senha digitada e da senha salva
@@ -40,7 +41,7 @@ class AuthenticateUserUseCase {
     // Mensagem se a senha estiver incorreta
     if (!passwordMatch) {
       // Colocar e-mail e senha incorretos para dificultar bypass.
-      throw new Error("Email or password incorrect!");
+      throw new AppError("Email or password incorrect!");
     }
 
     // Utilizar sha1 hash generator para gerar chave aleatória
