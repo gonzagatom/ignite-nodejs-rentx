@@ -52,11 +52,16 @@ class AuthenticateUserUseCase {
       expiresIn: "1d", // Expirar token em um dia
     });
 
-    // Retornando para quem requisitou o token
-    return {
-      user,
+    const tokenReturn: IResponse = {
       token,
+      user: {
+        name: user.name,
+        email: user.email,
+      },
     };
+
+    // Retornando para quem requisitou o token
+    return tokenReturn;
   }
 }
 
